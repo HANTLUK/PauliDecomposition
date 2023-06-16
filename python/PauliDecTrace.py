@@ -4,7 +4,7 @@ import itertools
 
 debug = 0
 
-def PauliDecNaive(matrix, PauliStringInit = "", MatInit = np.array([1])):
+def PauliDecTrace(matrix, PauliStringInit = "", MatInit = np.array([1])):
 
 	mat1 = np.array([[1.,0.],[0.,1.]],dtype=np.cdouble)
 	matX = np.array([[0.,1.],[1.,0.]],dtype=np.cdouble)
@@ -30,7 +30,7 @@ def PauliDecNaive(matrix, PauliStringInit = "", MatInit = np.array([1])):
 				MatInit.reshape(int(iter/2),2,int(iter/2),2).swapaxes(1,2)
 			matNew = np.tensordot(PauliMatrix,MatInit,0).swapaxes(1,2).reshape(2*iter,2*iter)
 			PauliString += Pauli
-			recursion = PauliDecNaive(matrix,PauliString,matNew)
+			recursion = PauliDecTrace(matrix,PauliString,matNew)
 			if recursion != []:
 				decomposition += recursion
 			PauliString = PauliStringInit

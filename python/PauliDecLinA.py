@@ -4,7 +4,7 @@ import itertools
 
 debug = 0
 
-def PauliDecPaper(matrix):
+def PauliDecLinA(matrix):
 
 	mat1 = np.array([[1.,0.],[0.,1.]],dtype=np.cdouble)
 	matX = np.array([[0.,1.],[1.,0.]],dtype=np.cdouble)

@@ -4,29 +4,27 @@ import scipy.sparse as sp
 import itertools
 import matplotlib.pyplot as plt
 from PauliDec import PauliDec
-from PauliDecNaive import PauliDecNaive
-from PauliDecPaper import PauliDecPaper
-# from PauliDecTensorFlow import PauliDecTensorFlow
-# from PauliDecTorch import PauliDecTorch
-from PauliDecImproved import PauliDecImproved
-# from PauliDecSparse import PauliDecSparse
+from PauliDecTrace import PauliDecTrace
+from PauliDecLinA import PauliDecLinA
 
 out = 1
 test = 0
 runs = 1
 speed = 1
 diag = 1
-rand = 0
-# "TensorFlow": PauliDecTensorFlow, "Torch": PauliDecTorch,  "Sparse": PauliDecSparse
-Methods = {"Algorithm": PauliDec, "Naive": PauliDecNaive, "Paper": PauliDecPaper}
-MaxSizes = {"Algorithm": 10, "Naive": 8, "Paper": 6}
+rand = 1
+
+CompareMethods = ["Tensor Product", "Trace", "Linear Algebra"]
+
+Methods = {"Tensor Product": PauliDec, "Trace": PauliDecTrace, "Linear Algebra": PauliDecLinA}
+MaxSizes = {"Tensor Product": 10, "Trace": 8, "Linear Algebra": 6}
 Results = {}
 ResultsOne = {}
 
-# Test of Speed for Random Matrices
+# Test of Speed for Random Matrices or unit matrix
 if speed:
 	if out: print("Speed Test \n")
-	for Method in Methods:
+	for Method in CompareMethods:
 		if out: print(Method+":")
 		tab = []
 		tabOne = []
@@ -51,16 +49,25 @@ if speed:
 
 	if rand:
 		fig,ax = plt.subplots(figsize=(5,5),dpi=150)
-		for Method in Methods:
-			ax.plot(range(1,MaxSizes[Method]),np.log(Results[Method]))
+		plt.xlabel('Number of Qubits')
+		plt.ylabel('Computation Time (s)')
+		plt.title('Comparison of Computation Time (Random Matrix)')
+		plt.grid(True)
+		for Method in CompareMethods:
+			ax.plot(range(1,MaxSizes[Method]),np.log(Results[Method])/np.log(4), 'o-', label=Method)
 		tab = [0.000000130000000, 0.000000060000000, 0.000000260000000, 0.000001140000000, 0.000005070000000, 0.000022110000000, 0.000094000000000, 0.000399590000000, 0.001710040000000, 0.007222440000000, 0.030391740000000, 0.126972590000000]
-		ax.plot(range(1,13),np.log(tab))
+		ax.plot(range(1,13),np.log(tab)/np.log(4), 'o-', label="Tensor Product (c++)")
+		plt.legend()
 		fig.savefig("plot.png",dpi=150)
 
 	if diag:
 		fig,ax = plt.subplots(figsize=(5,5),dpi=150)
-		for Method in Methods:
-			ax.plot(range(1,MaxSizes[Method]),np.log(ResultsOne[Method]))
+		plt.xlabel('Number of Qubits')
+		plt.ylabel('Computation Time (s)')
+		plt.title('Comparison of Computation Time (Unit Matrix)')
+		plt.grid(True)
+		for Method in CompareMethods:
+			ax.plot(range(1,MaxSizes[Method]),np.log(ResultsOne[Method])/np.log(4), 'o-', label=Method)
 		fig.savefig("plot2.png",dpi=150)
 
 runs = 1
@@ -69,7 +76,7 @@ out = 1
 acc = 0
 CompareMethods = []
 
-# Tests of Accuracy
+# Tests of Correct Computation
 if acc:
 	if out: print("Test of Correctness")
 	testMat1 = np.array([[1,0,0,0],[0,-1,0,0],[0,0,1,0],[0,0,0,-1]],dtype=np.cdouble)
