@@ -11,7 +11,7 @@ New approach: maximal 4**d depth with each one scalar multiplication and matrix 
 Simplification, if some (Early) Paulis do not appear (Symmetry of the Matrix).
 """
 
-def PauliDec(matrix, PauliStringInit = "", sparse = False, PreferredFactor = []):
+def PauliDec(matrix, PauliStringInit = ""):
 	"""
 	Returns the Pauli Decomposition of a Matrix recursively.
 	Input matrix: Matrix to decompose.
@@ -26,6 +26,8 @@ def PauliDec(matrix, PauliStringInit = "", sparse = False, PreferredFactor = [])
 	matZ = np.array([[1.,0.],[0.,-1.]],dtype=np.cdouble)
 	Paulis = [["1", mat1], ["X", matX], ["Y", matY], ["Z", matZ]]
 # Initialize values
+	if debug: print("Matrix ",matrix)
+	if debug: print("Shape ",matrix.shape)
 	dim = matrix.shape[0]
 	log2dim = int(np.log(dim)/np.log(2))
 	decomposition = []
