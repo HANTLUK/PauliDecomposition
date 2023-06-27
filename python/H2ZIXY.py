@@ -2,9 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 import itertools
 
-debug = 0
-
-def PauliDecLinA(matrix):
+def H2ZIXY(matrix):
 
 	mat1 = np.array([[1.,0.],[0.,1.]],dtype=np.cdouble)
 	matX = np.array([[0.,1.],[1.,0.]],dtype=np.cdouble)
@@ -23,9 +21,9 @@ def PauliDecLinA(matrix):
 	KeysToDelete = []
 	PauliDict = {}
 	def PauliDictValues(l):
-		yield from itertools. product(*([l] *NumTensorRepetitions))
+		yield from itertools.product(*([l] *NumTensorRepetitions))
 	for x in PauliDictValues("1XYZ"):
-		PauliKeyList. append ("".join(x))
+		PauliKeyList.append("".join(x))
 	for y in PauliKeyList:
 		PauliDict[y] = 0
 	for key in PauliDict:
@@ -65,5 +63,5 @@ def PauliDecLinA(matrix):
 	for i in range(len(PauliDict)):
 		b = x[i]
 		if abs(b)>eps:
-			decomposition.append(str(var_list[i])+", "+str(b))
+			decomposition.append(f"{str(var_list[i])}, {str(b)}")
 	return decomposition

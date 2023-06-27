@@ -3,18 +3,20 @@ import scipy.sparse as sp
 
 def PauliDecTensor(matrix, sparse=False, PauliStringInit=""):
 	"""
-		Returns the Pauli Decomposition of a square matrix with the given order.
+		Computes the Pauli decomposition of a square matrix.
 
 		Iteratively splits tensor factors off and decomposes those smaller
 		matrices. This is done using submatrices of the original matrix.
-		The Pauli Strings are generated in each step.
+		The Pauli strings are generated in each step.
 
 		Args:
-			matrix: Matrix to be decomposed (Preferrably numpy array / Sparse).
-			sparse: If Matrix is in sparse format.
+			matrix: Matrix to be decomposed
+					(Preferrably numpy array/scipysparse).
+			sparse: Whether matrix is in sparse format.
 			PauliStringInit: For recursive computation.
+			
 		Returns:
-			decomposition: String of 1XYZ with their factors.
+			decomposition/outString: String of 1XYZ with their factors.
 	"""
 
 	matDim = matrix.shape[0]
