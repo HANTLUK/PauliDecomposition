@@ -1,17 +1,16 @@
 import numpy as np
 import scipy.sparse as sp
-import psutil
 
 def PauliDecTensor(matrix, sparse=False, PauliStringInit=""):
 	"""
-		Returns the Pauli Decomposition of a square matrix with the given order.
+		Computes the Pauli Decomposition of a square matrix with the given order.
 
 		Iteratively splits tensor factors off and decomposes those smaller
 		matrices. This is done using submatrices of the original matrix.
 		The Pauli Strings are generated in each step.
 
 		Args:
-			matrix: Matrix to be decomposed (Preferrably numpy array / Sparse).
+			matrix: Matrix to be decomposed (Preferrably numpy array / sparse).
 			sparse: If Matrix is in sparse format.
 			PauliStringInit: For recursive computation.
 		Returns:
@@ -43,8 +42,6 @@ def PauliDecTensor(matrix, sparse=False, PauliStringInit=""):
 
 		coefficients = {"1": coeff1, "X": coeffX, "Y": coeffY, "Z": coeffZ}
 
-		if PauliStringInit == "": print(psutil.Process().memory_info().rss / (1024*1024))
-
 		matrix = None
 
 		if sparse:
@@ -62,19 +59,3 @@ def PauliDecTensor(matrix, sparse=False, PauliStringInit=""):
 
 	outputString = "".join(decomposition)
 	return outputString
-
-test = 1
-out = 1
-
-testMat1 = np.array([[1,0,0,0]
-					,[0,-1,0,0]
-					,[0,0,0,0]
-					,[0,0,0,-1]],dtype=np.cdouble)
-testMat2 = np.array([[-1,0]
-					,[0,1]],dtype=np.cdouble)
-
-if test:
-	decomposition = PauliDecTensor(testMat1)
-	if out: print(decomposition)
-	decomposition = PauliDecTensor(testMat2)
-	if out: print(decomposition)
