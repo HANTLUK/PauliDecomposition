@@ -13,7 +13,7 @@ using namespace std;
 using namespace std::chrono;
 typedef complex<double> dcomp;
 
-void PauliDecSparse(dcomp** Matrix, int dim, string PauliStringInit = "") {
+void PauliDecSparse(sparseMatrix Matrix, int dim, string PauliStringInit = "") {
 	// Matrix 2^dim dimensional square matrix
 	// dim number of qubit dimension
   // PauliStringInit for recursion
@@ -31,14 +31,12 @@ void PauliDecSparse(dcomp** Matrix, int dim, string PauliStringInit = "") {
 
 	// Get Partial Matrices
 	// Forming Partial Traces
-	dcomp*** partialMatrices = 0;
+	sparseMatrix partialMatrices[4] = 0;
+	for (k = 0; k < 4; k++) {
+		partialMatrices[i] = new sparseMatrix;
+	}
 	partialMatrices = new dcomp**[4];
-	for (i = 0; i < 4; i++) {
-        partialMatrices[i] = new dcomp*[subMatDim];
-        for (k = 0; k < subMatDim; k++) {
-            partialMatrices[i][k] = new dcomp[subMatDim];
-        }
-    }
+
     bool nonZeros[4] = {0,0,0,0};
 
     for (i = 0; i < subMatDim; i++) {

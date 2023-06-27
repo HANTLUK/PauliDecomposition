@@ -1,4 +1,5 @@
 import timeit
+import time
 import scipy.sparse as sp
 import itertools
 import matplotlib.pyplot as plt
@@ -6,7 +7,7 @@ from PauliDec import PauliDec
 from PauliDecTrace import PauliDecTrace
 from PauliDecLinA import PauliDecLinA
 from PauliDecSparse import PauliDecSparse
-from PauliDecImproved import PauliDecImproved
+from PauliDecTensor import PauliDecTensor
 import pennylane as qml
 from pennylane import numpy as np
 
@@ -30,10 +31,10 @@ def identityMatrix(dim):
 def sparseRandom(dim):
 	return sp.random(dim,dim,density=0.25**dim,format="csr")
 
-CompareMethods = ["Partial Trace", "Trace", "Linear Algebra", "Sparse", "Tensor Linear", "Penny Lane"]
+CompareMethods = ["Trace", "Linear Algebra", "Sparse", "Tensor Linear", "Penny Lane"]
 
-Methods = {"Partial Trace": PauliDec, "Trace": PauliDecTrace, "Linear Algebra": PauliDecLinA, "Sparse": PauliDecSparse, "Tensor Linear": PauliDecImproved, "Penny Lane": qml.pauli_decompose}
-MaxSizes = {"Partial Trace": 10, "Trace": 6, "Linear Algebra": 6, "Sparse": 8, "Tensor Linear": 10, "Tensor Product (C++)": 13, "Penny Lane": 5}
+Methods = {"Partial Trace": PauliDec, "Trace": PauliDecTrace, "Linear Algebra": PauliDecLinA, "Sparse": PauliDecSparse, "Tensor Linear": PauliDecTensor, "Penny Lane": qml.pauli_decompose}
+MaxSizes = {"Partial Trace": 10, "Trace": 7, "Linear Algebra": 6, "Sparse": 7, "Tensor Linear": 10, "Tensor Product (C++)": 13, "Penny Lane": 8}
 Tests = {"Diagonal Matrix": diag, "Unit Matrix": unit, "Random Matrix": rand, "Sparse Matrix": sparse}
 TestMatrices = {"Diagonal Matrix": diagRandom, "Unit Matrix": identityMatrix, "Random Matrix": randomMatrix, "Sparse Matrix": sparseRandom}
 Results = {}
@@ -59,11 +60,13 @@ if speed:
 						matrix = 0.5* (matrix + matrix.conjugate().transpose())
 					if debug: print("Matrix: ",matrix)
 					if debug: print("Shape: ",matrix.shape)
-					start_time = timeit.default_timer()
+					start_time = time.process_time()
 					for i in range(runs):
 						Methods[Method](matrix)
-					elapsed = timeit.default_timer() - start_time
-					tab[Method].append(elapsed)
+					elapsed = time.process_time() - start_time
+					if elapsed == 0.0:
+						elapsed = 0.01
+					tab[Method].append(elapsed/float(runs))
 					if out: print("dim",n,": ",elapsed)
 			Results[Test] = tab
 
@@ -85,34 +88,7 @@ for Test in Tests:
 		plt.grid(True)
 		for Method in CompareMethods:
 			ax.plot(range(1,MaxSizes[Method]),np.log(Results[Test][Method])/np.log(4), 'o-', label=Method)
-		Method = "Tensor Product (C++)"
-		ax.plot(range(1,MaxSizes[Method]),np.log(Results[Test][Method])/np.log(4), 'o-', label=Method)
+		# Method = "Tensor Product (C++)"
+		# ax.plot(range(1,MaxSizes[Method]),np.log(Results[Test][Method])/np.log(4), 'o-', label=Method)
 		plt.legend()
 		fig.savefig("plot"+Test+".png",dpi=150)
-
-runs = 1
-test = 0
-out = 1
-acc = 0
-CompareMethods = []
-
-# Tests of Correct Computation
-if acc:
-	if out: print("Test of Correctness")
-	testMat1 = np.array([[1,0,0,0],[0,-1,0,0],[0,0,1,0],[0,0,0,-1]],dtype=np.cdouble)
-	testMat2 = np.array([[-1,0],[0,1]],dtype=np.cdouble)
-
-	for Method in CompareMethods:
-		if test: print(Method)
-		decomposition = Methods[Method](testMat1)
-		if out: print(Method+":")
-		for n in decomposition:
-			if out: print(n)
-
-	for i in range(runs):
-		rand = np.add(np.random.rand(4,4),1.j*np.random.rand(4,4))
-		for Method in CompareMethods:
-			decomposition = Methods[Method](rand)
-			if out: print(Method+":")
-			for n in decomposition:
-				if out: print(n)
