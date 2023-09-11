@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
 import itertools
+import math
 
 def H2ZIXY(matrix):
 
@@ -15,7 +16,9 @@ def H2ZIXY(matrix):
 
 	Paulis = {"1":mat1,"X":matX,"Y":matY,"Z":matZ}
 
-	NumTensorRepetitions = int(np.log(dim)/np.log(2))
+	NumTensorRepetitions = math.ceil(np.log(dim)/np.log(2))
+	NumMissingComponents = 2**NumTensorRepetitions - dim
+	np.pad(matrix, ((0,NumMissingComponents), (0,NumMissingComponents)))
 	NumTotalTensors = 4**NumTensorRepetitions
 	PauliKeyList = []
 	KeysToDelete = []
