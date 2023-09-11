@@ -2,7 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 import math
 
-def PauliDecTensor(matrix,sparse=False,PauliStringInit="",output="Lists"):
+def PauliDecomposition(matrix,sparse=False,PauliStringInit="",output="Lists"):
 	"""
 		Computes the Pauli decomposition of a square matrix.
 
@@ -63,12 +63,12 @@ def PauliDecTensor(matrix,sparse=False,PauliStringInit="",output="Lists"):
 						+ matrix[halfDim:, halfDim:])
 		coeffX = 0.5*(matrix[halfDim:, 0:halfDim]
 						+ matrix[0:halfDim, halfDim:])
-		coeffY = 1.j*0.5*(matrix[halfDim:, 0:halfDim]
+		coeffY = -1.j*0.5*(matrix[halfDim:, 0:halfDim]
 						- matrix[0:halfDim, halfDim:])
 		coeffZ = 0.5*(matrix[0:halfDim, 0:halfDim]
 						- matrix[halfDim:, halfDim:])
 
-		coefficients = {"1": coeff1, "X": coeffX, "Y": coeffY, "Z": coeffZ}
+		coefficients = {"I": coeff1, "X": coeffX, "Y": coeffY, "Z": coeffZ}
 
 		matrix = None
 
@@ -82,7 +82,7 @@ def PauliDecTensor(matrix,sparse=False,PauliStringInit="",output="Lists"):
 				nonZero = mat.any()
 			# If zero, no branching
 			if nonZero != 0:
-				subDec = PauliDecTensor(mat,sparse,f"{PauliStringInit}{c}",output)
+				subDec = PauliDecomposition(mat,sparse,f"{PauliStringInit}{c}",output)
 				if output == "Lists":
 					Strings.extend(subDec[0])
 					Coeffs.extend(subDec[1])
