@@ -1,6 +1,6 @@
 # Tensorized Pauli Decomposition Algorithm
 
-This repository contains a Python implementation of the algorithm described in the paper: "Tensorized Pauli decomposition algorithm".
+This repository contains a Python implementation of the algorithm described in the paper: "[Tensorized Pauli decomposition algorithm](https://doi.org/10.48550/arXiv.2310.13421)".
 
 ## TensorizedPauliDecomposition
 This file contains the actual TPD algorithm.
