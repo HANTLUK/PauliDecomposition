@@ -6,13 +6,13 @@ Hantzko, L., Binkowski, L., Gupta, S. (2023). Tensorized Pauli decomposition alg
 
 The corresponding BibTex entry is:
 
-@misc{Hantzko2023,
-    author          = {Hantzko, Lukas and Binkowski, Lennart and Gupta, Sabhyata},
-    year            = {2023},
-    title           = {{Tensorized Pauli decomposition algorithm}},
-    eprint          = {2310.13421},
-    archivePrefix   = {arXiv},
-    primaryClass    = {quanth-ph}
+@misc{Hantzko2023,  
+&nbsp;&nbsp; author={Hantzko, Lukas and Binkowski, Lennart and Gupta, Sabhyata},  
+&nbsp;&nbsp; year={2023},  
+&nbsp;&nbsp; title={{Tensorized Pauli decomposition algorithm}},  
+&nbsp;&nbsp; eprint={2310.13421},  
+&nbsp;&nbsp; archivePrefix={arXiv},  
+&nbsp;&nbsp; primaryClass={quanth-ph}  
 }
 
 ## TensorizedPauliDecomposition
