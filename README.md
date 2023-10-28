@@ -1,6 +1,19 @@
 # Tensorized Pauli Decomposition Algorithm
 
-This repository contains a Python implementation of the algorithm described in the paper: "Tensorized Pauli decomposition algorithm".
+This repository contains a Python implementation of the algorithm described in the paper: "Tensorized Pauli decomposition algorithm". A preprint of this paper is currently on the arXiv. Please cite this paper as:
+
+Hantzko, L., Binkowski, L., Gupta, S. (2023). Tensorized Pauli decomposition algorithm, arXiv:2310.13421 [quant-ph]
+
+The corresponding BibTex entry is:
+
+@misc{Hantzko2023,
+    author          = {Hantzko, Lukas and Binkowski, Lennart and Gupta, Sabhyata},
+    year            = {2023},
+    title           = {{Tensorized Pauli decomposition algorithm}},
+    eprint          = {2310.13421},
+    archivePrefix   = {arXiv},
+    primaryClass    = {quanth-ph}
+}
 
 ## TensorizedPauliDecomposition
 This file contains the actual TPD algorithm.
