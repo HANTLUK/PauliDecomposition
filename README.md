@@ -1,18 +1,22 @@
 # Tensorized Pauli Decomposition Algorithm
 
-This repository contains a Python implementation of the algorithm described in the paper: "[Tensorized Pauli decomposition algorithm](https://doi.org/10.48550/arXiv.2310.13421)".. A preprint of this paper is currently on the arXiv. Please cite this paper as:
+This repository contains a Python implementation of the algorithm described in the paper: "[Tensorized Pauli decomposition algorithm](https://iopscience.iop.org/article/10.1088/1402-4896/ad6499)", as published in [Physica Scripta](https://iopscience.iop.org/journal/1402-4896). The paper is also available on the [arXiv](https://doi.org/10.48550/arXiv.2310.13421). Please cite this paper as:
 
-Hantzko, L., Binkowski, L., Gupta, S. (2023). Tensorized Pauli decomposition algorithm, arXiv:2310.13421 [quant-ph]
+Lukas Hantzko *et al* 2024 *Phys. Scr.* **99** 085128
 
 The corresponding BibTex entry is:
 
-@misc{Hantzko2023,  
+@article{Hantzko2024TensorizedPauliDecompositionAlgorithm,  
 &nbsp;&nbsp; author={Hantzko, Lukas and Binkowski, Lennart and Gupta, Sabhyata},  
-&nbsp;&nbsp; year={2023},  
-&nbsp;&nbsp; title={{Tensorized Pauli decomposition algorithm}},  
-&nbsp;&nbsp; eprint={2310.13421},  
-&nbsp;&nbsp; archivePrefix={arXiv},  
-&nbsp;&nbsp; primaryClass={quanth-ph}  
+&nbsp;&nbsp; year={2024},  
+&nbsp;&nbsp; title={Tensorized Pauli decomposition algorithm},  
+&nbsp;&nbsp; journal={Phys. Scr.},  
+&nbsp;&nbsp; volume={99},  
+&nbsp;&nbsp; number={8},  
+&nbsp;&nbsp; pages={085128},  
+&nbsp;&nbsp; publisher={IOP Publishing},  
+&nbsp;&nbsp; doi={10.1088/1402-4896/ad6499},  
+&nbsp;&nbsp; url={ht<span>tps://</span>dx.doi.org/10.1088/1402-4896/ad6499}  
 }
 
 ## TensorizedPauliDecomposition
