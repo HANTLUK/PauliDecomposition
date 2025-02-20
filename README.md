@@ -28,3 +28,5 @@ Sparsity can be exploited by setting the optional argument sparse to True.
 The test suite compares the result of different Pauli decomposition implementations to verify their correctness.
 As a point of reference Qiskit's SparsePauliOp method is used.
 It can also be used for other algorithms then presented, if the output is in the right format including a list of Pauli Strings and a list/np.array of the coefficients.
+## Benchmarking
+This File does the Benchmarking and outputs tables of runtimes. To run, you need to import the suitable libraries and implementations of the algorithms you want to compare. We included test matrices and tfim Hamiltonian as a seperate file.
