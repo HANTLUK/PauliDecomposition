@@ -19,17 +19,17 @@ def spin_operator(N):
 		sx_list.append(qt.tensor(op_list))
 	return sx_list, sz_list
 
-def tfimHamiltonian(dim):
+def tfim_hamiltonian(dim):
 	N = int(np.log(dim)/np.log(2))
-	Jzz = -0.5
-	hx = -0.05
+	j_zz = -0.5
+	h_x = -0.05
 	sx_list, sz_list = spin_operator(N)
-	Jzs = Jzz*np.ones(N)
-	hxs = hx*np.ones(N)
+	j_z_array = j_zz*np.ones(N)
+	h_x_array = h_x*np.ones(N)
 
-	H = 0
+	hamiltonian = 0
 	for n in range(N):
-		H += hxs[n] * sx_list[n]
+		hamiltonian += h_x_array[n] * sx_list[n]
 	for n in range(N - 1):
-		H += Jzs[n] * sz_list[n] * sz_list[n + 1]
-	return H.full()
+		hamiltonian += j_z_array[n] * sz_list[n] * sz_list[n + 1]
+	return hamiltonian.full()
