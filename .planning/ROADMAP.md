@@ -28,12 +28,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Constants use UPPER_SNAKE_CASE throughout the codebase
   4. Related utility functions are grouped logically (matrix generators together, spin operators together, etc.)
   5. Entry points (test execution, benchmarking) are clearly separated from library code
-**Plans**: 3 plans in 2 waves
+**Plans**: 4 plans in 2 waves
 
 Plans:
 - [ ] 01-01-PLAN.md - Rename core algorithm module (TensorizedPauliDecomposition.py)
 - [ ] 01-02-PLAN.md - Rename test and utility modules (TestSuite.py, TFIM.py)
 - [ ] 01-03-PLAN.md - Rename benchmarking module and verify refactoring
+- [ ] 01-04-PLAN.md - Add `__name__` guards to separate entry points from library code (STRC-03)
 
 ### Phase 2: Documentation
 **Goal**: Every function and complex algorithm step is documented with type hints
@@ -71,7 +72,7 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Code Foundation | 0/3 | Not started | - |
+| 1. Code Foundation | 0/4 | Not started | - |
 | 2. Documentation | 0/TBD | Not started | - |
 | 3. Tests & README | 0/TBD | Not started | - |
 
