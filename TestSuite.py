@@ -1,35 +1,35 @@
 import numpy as np
 import math
-from TensorizedPauliDecomposition import PauliDecomposition
+from TensorizedPauliDecomposition import pauli_decomposition
 
 from qiskit.quantum_info import SparsePauliOp
 
-def test2(matrix):
-	testResult2 = SparsePauliOp.from_operator(matrix)
-	coeffs2 = testResult2.coeffs
-	list2 = testResult2.paulis
-	return [list2,coeffs2]
+def test_qiskit(matrix):
+	test_result = SparsePauliOp.from_operator(matrix)
+	coeffs_qiskit = test_result.coeffs
+	pauli_strings_qiskit = test_result.paulis
+	return [pauli_strings_qiskit, coeffs_qiskit]
 
-def test1(matrix):
-	list1, coeffs1 = PauliDecomposition(matrix)
-	return [list1,coeffs1]
+def test_tpd(matrix):
+	pauli_strings_tpd, coeffs_tpd = pauli_decomposition(matrix)
+	return [pauli_strings_tpd, coeffs_tpd]
 
-def randomMatrix(dim):
+def random_matrix(dim):
 	return np.add(np.random.rand(dim,dim),1.j*np.random.rand(dim,dim))
 
-testMatrix = randomMatrix(4)
+test_matrix = random_matrix(4)
 
-def comparison(method1, method2, matrix):
-	list1,coeffs1 = method1(matrix)
-	list2,coeffs2 = method2(matrix)
+def compare_methods(method1, method2, matrix):
+	pauli_strings_tpd, coeffs_tpd = method1(matrix)
+	pauli_strings_qiskit, coeffs_qiskit = method2(matrix)
 	equal = True
-	for x,y in zip(list1,list2):
+	for x,y in zip(pauli_strings_tpd, pauli_strings_qiskit):
 		if str(x) != str(y):
 			equal = False
 	eps = 10**(-5)
-	for x,y in zip(coeffs1,coeffs2):
+	for x,y in zip(coeffs_tpd, coeffs_qiskit):
 		if abs(complex(x) - complex(y)) > eps:
 			equal = False
 	return equal
 
-print(comparison(test1,test2,testMatrix))
+print(compare_methods(test_tpd, test_qiskit, test_matrix))
