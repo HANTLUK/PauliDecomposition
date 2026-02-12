@@ -7,9 +7,9 @@
 
 ### Code Naming & Style
 
-- [ ] **NAME-01**: All functions use consistent snake_case naming convention
-- [ ] **NAME-02**: All variables use descriptive, domain-appropriate names (e.g., `qubit_dim` not `qBitDim`)
-- [ ] **NAME-03**: Constants use UPPER_SNAKE_CASE consistently
+- [x] **NAME-01**: All functions use consistent snake_case naming convention
+- [x] **NAME-02**: All variables use descriptive, domain-appropriate names (e.g., `qubit_dim` not `qBitDim`)
+- [x] **NAME-03**: Constants use UPPER_SNAKE_CASE consistently
 
 ### Documentation
 
@@ -19,9 +19,9 @@
 
 ### Code Structure
 
-- [ ] **STRC-01**: Modules organized into a clear package structure if it improves navigability
-- [ ] **STRC-02**: Related utility functions grouped logically (matrix generators, spin operators, etc.)
-- [ ] **STRC-03**: Entry points clearly separated from library code
+- [x] **STRC-01**: Modules organized into a clear package structure if it improves navigability
+- [x] **STRC-02**: Related utility functions grouped logically (matrix generators, spin operators, etc.)
+- [x] **STRC-03**: Entry points clearly separated from library code
 
 ### Tests
 
@@ -59,12 +59,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAME-01 | Phase 1 | Pending |
-| NAME-02 | Phase 1 | Pending |
-| NAME-03 | Phase 1 | Pending |
-| STRC-01 | Phase 1 | Pending |
-| STRC-02 | Phase 1 | Pending |
-| STRC-03 | Phase 1 | Pending |
+| NAME-01 | Phase 1 | Done |
+| NAME-02 | Phase 1 | Done |
+| NAME-03 | Phase 1 | Done |
+| STRC-01 | Phase 1 | Done |
+| STRC-02 | Phase 1 | Done |
+| STRC-03 | Phase 1 | Done |
 | DOCS-01 | Phase 2 | Pending |
 | DOCS-02 | Phase 2 | Pending |
 | DOCS-03 | Phase 2 | Pending |
