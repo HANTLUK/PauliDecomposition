@@ -53,49 +53,51 @@ methods_name = {"h2zixy": "h2", "pennylane": "pl", "Qiskit": "Qk", "PC": "PC"}
 max_sizes = {"h2zixy": 9, "pennylane": 10, "Qiskit": 10, "Cirq": 10, "PC" : 10}
 tests = {"diag": "Diagonal Matrix", "herm" : "Hermitian Matrix", "symm": "Symmetric Matrix", "rand": "Random Matrix", "spars": "Sparse Matrix", "unit": "Unit Matrix", "tfim": "TFIM Hamiltonian", "oneTerm": "One Term"}
 test_matrices = {"diag": diag_random, "unit": identity_matrix, "rand": random_matrix, "spars": sparse_random, "herm" : herm_random, "symm" : symm_random, "tfim": tfim_hamiltonian, "oneTerm": one_term}
-results = {}
 
-# Test of speed and stochastic evaluation
-if STAT_ENABLED:
-	if OUTPUT_ENABLED: print("Speed Test:")
-	for test_name in execute_tests:
-		tab = {}
-		if OUTPUT_ENABLED: print(f"{tests[test_name]}:")
+if __name__ == "__main__":
+	results = {}
 
-		with io.open(f"{tests[test_name]}.dat", "w") as file:
-			for method_name in compare_methods:
-				output_line = f"{methods_name[method_name]} \n"
-				file.write(output_line)
-				if OUTPUT_ENABLED: print(f"{method_name}:")
-				tab[method_name] = []
+	# Test of speed and stochastic evaluation
+	if STAT_ENABLED:
+		if OUTPUT_ENABLED: print("Speed Test:")
+		for test_name in execute_tests:
+			tab = {}
+			if OUTPUT_ENABLED: print(f"{tests[test_name]}:")
 
-				for n in range(2,max_sizes[method_name]+1):
+			with io.open(f"{tests[test_name]}.dat", "w") as file:
+				for method_name in compare_methods:
+					output_line = f"{methods_name[method_name]} \n"
+					file.write(output_line)
+					if OUTPUT_ENABLED: print(f"{method_name}:")
+					tab[method_name] = []
 
-					output_line = [f"{n} \t"]
-					dim = 2**n
-					matrix = test_matrices[test_name](dim)
-					if test_name == "spars":
-						matrix = np.array(matrix.todense())
-					if method_name == "pennylane":
-						matrix = 0.5* (matrix + matrix.conjugate().transpose())
+					for n in range(2,max_sizes[method_name]+1):
 
-					elapsed = []
-					for i in range(STAT_RUNS):
-						start_time = timeit.default_timer()
-						if method_name == "pennylane" and test_name == "spars":
-							methods[method_name](matrix)
-						else:
-							methods[method_name](matrix)
-						elapsed.append((timeit.default_timer() - start_time))
+						output_line = [f"{n} \t"]
+						dim = 2**n
+						matrix = test_matrices[test_name](dim)
+						if test_name == "spars":
+							matrix = np.array(matrix.todense())
+						if method_name == "pennylane":
+							matrix = 0.5* (matrix + matrix.conjugate().transpose())
 
-					mean = statistics.mean(elapsed)
-					output_line.append(f"{mean} \n")
-					file.write("".join(output_line))
+						elapsed = []
+						for i in range(STAT_RUNS):
+							start_time = timeit.default_timer()
+							if method_name == "pennylane" and test_name == "spars":
+								methods[method_name](matrix)
+							else:
+								methods[method_name](matrix)
+							elapsed.append((timeit.default_timer() - start_time))
 
-					tab[method_name].append(mean)
-					if OUTPUT_ENABLED: print("dim",n,": ",elapsed)
-					if mean > TIME_BARRIER:
-						break
-				file.write("\n\n")
+						mean = statistics.mean(elapsed)
+						output_line.append(f"{mean} \n")
+						file.write("".join(output_line))
 
-		results[test_name] = tab
+						tab[method_name].append(mean)
+						if OUTPUT_ENABLED: print("dim",n,": ",elapsed)
+						if mean > TIME_BARRIER:
+							break
+					file.write("\n\n")
+
+			results[test_name] = tab
