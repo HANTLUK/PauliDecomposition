@@ -17,8 +17,6 @@ def test_tpd(matrix):
 def random_matrix(dim):
 	return np.add(np.random.rand(dim,dim),1.j*np.random.rand(dim,dim))
 
-test_matrix = random_matrix(4)
-
 def compare_methods(method1, method2, matrix):
 	pauli_strings_tpd, coeffs_tpd = method1(matrix)
 	pauli_strings_qiskit, coeffs_qiskit = method2(matrix)
@@ -32,4 +30,6 @@ def compare_methods(method1, method2, matrix):
 			equal = False
 	return equal
 
-print(compare_methods(test_tpd, test_qiskit, test_matrix))
+if __name__ == "__main__":
+	test_matrix = random_matrix(4)
+	print(compare_methods(test_tpd, test_qiskit, test_matrix))
