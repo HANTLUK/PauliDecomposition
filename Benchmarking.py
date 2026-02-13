@@ -110,7 +110,7 @@ def sparse_random(dim: int) -> sp.csr_matrix:
 	"""
 	return sp.random(dim,dim,density=1./dim,format="csr")
 
-def pauli_dec_sparse(matrix) -> list:
+def pauli_dec_sparse(matrix: sp.spmatrix) -> list:
 	"""Run Pauli decomposition on a sparse matrix.
 
 	Wrapper that calls ``pauli_decomposition`` with ``sparse=True``.
