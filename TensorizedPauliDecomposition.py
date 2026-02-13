@@ -57,9 +57,12 @@ def pauli_decomposition(
 	"""
 
 	mat_dim = matrix.shape[0]
+	# Determine the number of qubits: n = ceil(log2(dim))
+	# A 2^n x 2^n matrix decomposes into n-qubit Pauli strings
 	qubit_dim = math.ceil(np.log(mat_dim)/np.log(2))
 
-	# Pad, if dimension is not a power of 2
+	# Zero-pad the matrix to the next power of 2 if needed.
+	# This ensures the matrix dimensions match 2^n for n-qubit decomposition.
 
 	pad_dim = 2**qubit_dim - mat_dim
 	if pad_dim != 0:
@@ -75,8 +78,8 @@ def pauli_decomposition(
 		coeffs = []
 
 
-	# Output for dimension 1
-
+	# Base case: 1x1 matrix (scalar). The single element is the coefficient
+	# for the accumulated Pauli string. Only record non-zero terms.
 	if qubit_dim == 0:
 		if matrix[0,0] != 0.0:
 			if output == "Lists":
@@ -88,9 +91,19 @@ def pauli_decomposition(
 			else:
 				decomposition = [f"{matrix[0,0]}, {pauli_string_init}. "]
 
-	# Calculates the tensor product coefficients via the sliced submatrices.
-	# If one of these components is zero that coefficient is ignored.
-
+	# Tensor factorization using the Pauli basis.
+	# For a 2^n x 2^n matrix M, split into 2^(n-1) x 2^(n-1) blocks:
+	#   M = [[A, B],    where A = M[0:h, 0:h], B = M[0:h, h:2h],
+	#        [C, D]]          C = M[h:2h, 0:h], D = M[h:2h, h:2h]
+	#
+	# The Pauli coefficients for the leading qubit are:
+	#   coeff_I = (A + D) / 2     (identity component)
+	#   coeff_X = (C + B) / 2     (Pauli X component)
+	#   coeff_Y = -i(C - B) / 2   (Pauli Y component)
+	#   coeff_Z = (A - D) / 2     (Pauli Z component)
+	#
+	# Each coefficient matrix is itself a 2^(n-1) x 2^(n-1) matrix
+	# that will be recursively decomposed for the remaining qubits.
 	if qubit_dim > 0:
 		half_dim = int(2**(qubit_dim-1))
 
@@ -105,17 +118,19 @@ def pauli_decomposition(
 
 		coefficients = {"I": coeff1, "X": coeffX, "Y": coeffY, "Z": coeffZ}
 
+		# Release reference to the original matrix to reduce memory usage
+		# during deep recursion on large matrices.
 		matrix = None
 
-		# Recursion for the Submatrices
-
+		# Recurse on each non-zero Pauli coefficient matrix.
+		# Append the current Pauli label (I/X/Y/Z) to the growing string.
+		# Skip zero matrices to avoid unnecessary branches (sparsity optimization).
 		for c in coefficients:
 			mat = coefficients[c]
 			if sparse:
 				non_zero = len(mat.nonzero()[0])
 			else:
 				non_zero = mat.any()
-			# If zero, no branching
 			if non_zero != 0:
 				sub_decomposition = pauli_decomposition(mat, sparse, f"{pauli_string_init}{c}", output)
 				if output == "Lists":
