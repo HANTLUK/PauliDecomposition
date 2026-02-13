@@ -1,24 +1,59 @@
+from typing import Union, List
 import numpy as np
 import scipy.sparse as sp
 import math
 
-def pauli_decomposition(matrix, sparse=False, pauli_string_init="", output="Lists"):
-	"""
-		Computes the Pauli decomposition of a square matrix.
+def pauli_decomposition(
+	matrix: Union[np.ndarray, sp.spmatrix],
+	sparse: bool = False,
+	pauli_string_init: str = "",
+	output: str = "Lists"
+) -> Union[List[List], str]:
+	"""Decompose a matrix into a sum of Pauli operator tensor products.
 
-		Iteratively splits tensor factors off and decomposes those smaller
-		matrices. This is done using submatrices of the original matrix.
-		The Pauli strings are generated in each step.
+	Uses a recursive tensor factorization approach: at each recursion level,
+	the matrix is split into four submatrices corresponding to the Pauli
+	basis {I, X, Y, Z}, and the algorithm recurses on each non-zero
+	submatrix to build up the full Pauli string decomposition.
 
-		Args:
-			matrix: Matrix to be decomposed
-					(Preferrably numpy array/scipysparse).
-			output: How the output should be generated.
-			sparse: Whether matrix is in sparse format.
-			pauli_string_init: For recursive computation.
+	Non-power-of-2 matrices are zero-padded to the next power of 2.
 
-		Returns:
-			decomposition/output_string: String of 1XYZ with their factors.
+	Parameters
+	----------
+	matrix : np.ndarray or scipy.sparse.spmatrix
+		Square matrix to decompose. Can be dense (NumPy array) or sparse
+		(SciPy sparse matrix). Non-power-of-2 dimensions are automatically
+		padded with zeros.
+	sparse : bool, optional
+		Whether ``matrix`` is in SciPy sparse format. Default is False.
+	pauli_string_init : str, optional
+		Prefix for Pauli strings during recursion. Used internally;
+		callers should leave this as the default empty string.
+	output : str, optional
+		Output format. ``"Lists"`` (default) returns a list of two lists
+		``[pauli_strings, coefficients]``. Any other value returns a
+		formatted string representation.
+
+	Returns
+	-------
+	list of [list of str, list of complex] or str
+		If ``output == "Lists"``: returns ``[pauli_strings, coefficients]``
+		where ``pauli_strings`` is a list of Pauli operator strings
+		(e.g., ``"IXYZ"``) and ``coefficients`` is a list of complex
+		coefficients.
+		If ``output != "Lists"``: returns a single formatted string with
+		all terms.
+
+	Examples
+	--------
+	>>> import numpy as np
+	>>> from TensorizedPauliDecomposition import pauli_decomposition
+	>>> matrix = np.array([[1, 0], [0, -1]])  # Pauli Z matrix
+	>>> strings, coeffs = pauli_decomposition(matrix)
+	>>> strings
+	['Z']
+	>>> coeffs
+	[1.0]
 	"""
 
 	mat_dim = matrix.shape[0]
