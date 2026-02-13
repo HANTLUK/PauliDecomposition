@@ -97,6 +97,156 @@ matrix_3x3 = np.random.rand(3, 3)
 pauli_strings, coefficients = pauli_decomposition(matrix_3x3)
 ```
 
+## API Reference
+
+### TensorizedPauliDecomposition
+
+**`pauli_decomposition(matrix, sparse=False, pauli_string_init="", output="Lists")`**
+
+Decompose a matrix into a sum of Pauli operator tensor products.
+
+- **Parameters:**
+  - `matrix` (np.ndarray or scipy.sparse.spmatrix): Square matrix to decompose. Non-power-of-2 dimensions are automatically zero-padded.
+  - `sparse` (bool, optional): Whether the matrix is in SciPy sparse format. Default is False.
+  - `pauli_string_init` (str, optional): Prefix for Pauli strings during recursion. For internal use; callers should leave this as the default empty string.
+  - `output` (str, optional): Output format. "Lists" (default) returns `[pauli_strings, coefficients]`. Any other value returns a formatted string representation.
+
+- **Returns:** `[list of str, list of complex]` if `output="Lists"`, otherwise `str`
+
+### TestSuite
+
+**`decompose_with_qiskit(matrix)`**
+
+Decompose a matrix using Qiskit's SparsePauliOp for reference comparison.
+
+- **Parameters:**
+  - `matrix` (np.ndarray): Square matrix to decompose.
+
+- **Returns:** `[PauliList, np.ndarray]` - Pauli strings and coefficients from Qiskit's decomposition.
+
+**`decompose_with_tpd(matrix)`**
+
+Decompose a matrix using the tensorized Pauli decomposition algorithm.
+
+- **Parameters:**
+  - `matrix` (np.ndarray): Square matrix to decompose.
+
+- **Returns:** `[list of str, list of complex]` - Pauli strings and coefficients from the TPD algorithm.
+
+**`random_matrix(dim)`**
+
+Generate a random complex matrix of given dimension.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Random complex matrix of shape (dim, dim).
+
+**`compare_methods(method1, method2, matrix)`**
+
+Compare two Pauli decomposition methods for equivalence.
+
+- **Parameters:**
+  - `method1` (callable): First decomposition function returning `[pauli_strings, coefficients]`.
+  - `method2` (callable): Second decomposition function returning `[pauli_strings, coefficients]`.
+  - `matrix` (np.ndarray): Square matrix to decompose with both methods.
+
+- **Returns:** `bool` - True if both methods produce the same Pauli strings and coefficients within tolerance (1e-5), False otherwise.
+
+### TFIM
+
+**`spin_operator(N)`**
+
+Construct N-qubit spin operator lists for the transverse field Ising model.
+
+- **Parameters:**
+  - `N` (int): Number of qubit sites (spins) in the chain.
+
+- **Returns:** `(list, list)` - `(sx_list, sz_list)` where each list has N elements. `sx_list[n]` is the sigma_x operator acting on site n, and `sz_list[n]` is the sigma_z operator acting on site n.
+
+**`tfim_hamiltonian(dim)`**
+
+Generate the transverse field Ising model Hamiltonian matrix.
+
+- **Parameters:**
+  - `dim` (int): Matrix dimension (must be a power of 2). The number of qubits is inferred as N = log2(dim).
+
+- **Returns:** `np.ndarray` - The full dense Hamiltonian matrix of shape (dim, dim).
+
+### Benchmarking
+
+**`diag_random(dim)`**
+
+Generate a random complex diagonal matrix.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Complex diagonal matrix of shape (dim, dim).
+
+**`random_matrix(dim)`**
+
+Generate a random complex matrix.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Random complex matrix of shape (dim, dim).
+
+**`identity_matrix(dim)`**
+
+Generate an identity matrix.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Identity matrix of shape (dim, dim).
+
+**`sparse_random(dim)`**
+
+Generate a random sparse matrix in CSR format with density 1/dim.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `scipy.sparse.csr_matrix` - Random sparse matrix of shape (dim, dim).
+
+**`pauli_dec_sparse(matrix)`**
+
+Run Pauli decomposition on a sparse matrix.
+
+- **Parameters:**
+  - `matrix` (scipy.sparse.spmatrix): Sparse matrix to decompose.
+
+- **Returns:** `list` - Pauli decomposition result from `pauli_decomposition` with `sparse=True`.
+
+**`symm_random(dim)`**
+
+Generate a random complex symmetric matrix (M + M^T).
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Symmetric complex matrix of shape (dim, dim).
+
+**`herm_random(dim)`**
+
+Generate a random Hermitian matrix (M + M^dagger).
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix.
+
+- **Returns:** `np.ndarray` - Hermitian matrix of shape (dim, dim).
+
+**`one_term(dim)`**
+
+Generate a matrix with a single tensor-product term using Kronecker product structure.
+
+- **Parameters:**
+  - `dim` (int): Side length of the square matrix. Must be even.
+
+- **Returns:** `np.ndarray` - Matrix of shape (dim, dim) with structure kron(random_2x2, I_{dim/2}).
+
 ## TensorizedPauliDecomposition
 
 This module contains the core TPD algorithm implementation. The algorithm decomposes a square matrix (NumPy array or SciPy sparse matrix) into a sum of Pauli operator tensor products. The default implementation works with dense matrices, but sparsity can be exploited by setting the optional argument `sparse=True`.
