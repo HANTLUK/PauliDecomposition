@@ -44,10 +44,11 @@ Plans:
   1. Every public function has a docstring explaining what it does, its parameters, return values, and includes an example
   2. Complex algorithm sections (tensor factorization, recursion logic) have inline comments explaining the math and logic
   3. All function signatures include type hints for parameters and return values
-**Plans**: TBD
+**Plans**: 2 plans in 1 wave
 
 Plans:
-- TBD (defined during plan-phase)
+- [ ] 02-01-PLAN.md - Document core algorithm module (TensorizedPauliDecomposition.py) with docstrings, type hints, and math comments
+- [ ] 02-02-PLAN.md - Document support modules (TFIM.py, TestSuite.py, Benchmarking.py) with docstrings and type hints
 
 ### Phase 3: Tests & README
 **Goal**: Tests are readable and README provides complete usage guidance
@@ -73,9 +74,9 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Code Foundation | 4/4 | ✓ Complete | 2026-02-12 |
-| 2. Documentation | 0/TBD | Not started | - |
+| 2. Documentation | 0/2 | In progress | - |
 | 3. Tests & README | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-12*
-*Last updated: 2026-02-12 - Phase 1 complete*
+*Last updated: 2026-02-13 - Phase 2 planned*
