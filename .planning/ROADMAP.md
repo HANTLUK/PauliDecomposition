@@ -61,11 +61,11 @@ Plans:
   4. README includes usage examples showing how to call PauliDecomposition with different input types
   5. README includes API reference documenting all public functions with their parameters
   6. README includes installation and dependency instructions
-**Plans**: 2 plans in 1 wave
+**Plans**: 2 plans in 2 waves
 
 Plans:
-- [ ] 03-01-PLAN.md -- Refactor TestSuite.py with descriptive function names and documented assertions
-- [ ] 03-02-PLAN.md -- Expand README.md with usage examples, API reference, and installation instructions
+- [ ] 03-01-PLAN.md -- Refactor TestSuite.py with descriptive function names and documented assertions (wave 1)
+- [ ] 03-02-PLAN.md -- Expand README.md with usage examples, API reference, and installation instructions (wave 2, depends on 03-01)
 
 ## Progress
 
