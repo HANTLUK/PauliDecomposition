@@ -5,6 +5,7 @@ import itertools
 import matplotlib.pyplot as plt
 import statistics
 import io
+from typing import Dict, List
 
 from H2ZIXY import H2ZIXY # H2ZIXY Algorithm
 from pauli_decomposer import PauliDecomposer # Pauli Decomposer Paper
@@ -23,23 +24,184 @@ STAT_RUNS = 2
 STAT_ENABLED = 1
 TIME_BARRIER = 10
 
-def diag_random(dim):
+def diag_random(dim: int) -> np.ndarray:
+	"""Generate a random complex diagonal matrix.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	np.ndarray
+	    Complex diagonal matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = diag_random(4)
+	>>> M.shape
+	(4, 4)
+	"""
 	return np.add(np.zeros([dim,dim]),np.diag(np.add(np.random.rand(dim),1.j*np.random.rand(dim))))
-def random_matrix(dim):
+
+def random_matrix(dim: int) -> np.ndarray:
+	"""Generate a random complex matrix.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	np.ndarray
+	    Random complex matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = random_matrix(4)
+	>>> M.shape
+	(4, 4)
+	"""
 	return np.add(np.random.rand(dim,dim),1.j*np.random.rand(dim,dim))
-def identity_matrix(dim):
+
+def identity_matrix(dim: int) -> np.ndarray:
+	"""Generate an identity matrix.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	np.ndarray
+	    Identity matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = identity_matrix(4)
+	>>> np.allclose(M, np.eye(4))
+	True
+	"""
 	return np.identity(dim)
-def sparse_random(dim):
+
+def sparse_random(dim: int) -> sp.csr_matrix:
+	"""Generate a random sparse matrix in CSR format.
+
+	Density is set to 1/dim, producing approximately dim non-zero elements.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	scipy.sparse.csr_matrix
+	    Random sparse matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = sparse_random(8)
+	>>> M.shape
+	(8, 8)
+	"""
 	return sp.random(dim,dim,density=1./dim,format="csr")
-def pauli_dec_sparse(matrix):
+
+def pauli_dec_sparse(matrix) -> list:
+	"""Run Pauli decomposition on a sparse matrix.
+
+	Wrapper that calls ``pauli_decomposition`` with ``sparse=True``.
+
+	Parameters
+	----------
+	matrix : scipy.sparse.spmatrix
+	    Sparse matrix to decompose.
+
+	Returns
+	-------
+	list
+	    Pauli decomposition result from ``pauli_decomposition``.
+
+	Examples
+	--------
+	>>> M = sparse_random(4)
+	>>> result = pauli_dec_sparse(M)
+	"""
 	return pauli_decomposition(matrix,sparse=True)
-def symm_random(dim):
+
+def symm_random(dim: int) -> np.ndarray:
+	"""Generate a random complex symmetric matrix.
+
+	Constructs M + M^T from a random matrix M.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	np.ndarray
+	    Symmetric complex matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = symm_random(4)
+	>>> np.allclose(M, M.T)
+	True
+	"""
 	rand = random_matrix(dim)
 	return np.add(rand,np.transpose(rand))
-def herm_random(dim):
+
+def herm_random(dim: int) -> np.ndarray:
+	"""Generate a random Hermitian matrix.
+
+	Constructs M + M^dagger from a random matrix M.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix.
+
+	Returns
+	-------
+	np.ndarray
+	    Hermitian matrix of shape (dim, dim).
+
+	Examples
+	--------
+	>>> M = herm_random(4)
+	>>> np.allclose(M, M.conj().T)
+	True
+	"""
 	rand = random_matrix(dim)
 	return np.add(rand,rand.conjugate().transpose())
-def one_term(dim):
+
+def one_term(dim: int) -> np.ndarray:
+	"""Generate a matrix with a single tensor-product term.
+
+	Creates kron(random_2x2, I_{dim/2}), which decomposes into
+	exactly one Pauli tensor product term per 2x2 Pauli component.
+
+	Parameters
+	----------
+	dim : int
+	    Side length of the square matrix. Must be even.
+
+	Returns
+	-------
+	np.ndarray
+	    Matrix of shape (dim, dim) with Kronecker product structure.
+
+	Examples
+	--------
+	>>> M = one_term(4)
+	>>> M.shape
+	(4, 4)
+	"""
 	rand = random_matrix(2)
 	return np.kron(rand,np.eye(int(dim/2)))
 
