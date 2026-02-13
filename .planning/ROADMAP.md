@@ -61,10 +61,11 @@ Plans:
   4. README includes usage examples showing how to call PauliDecomposition with different input types
   5. README includes API reference documenting all public functions with their parameters
   6. README includes installation and dependency instructions
-**Plans**: TBD
+**Plans**: 2 plans in 1 wave
 
 Plans:
-- TBD (defined during plan-phase)
+- [ ] 03-01-PLAN.md -- Refactor TestSuite.py with descriptive function names and documented assertions
+- [ ] 03-02-PLAN.md -- Expand README.md with usage examples, API reference, and installation instructions
 
 ## Progress
 
@@ -75,8 +76,8 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Code Foundation | 4/4 | ✓ Complete | 2026-02-12 |
 | 2. Documentation | 2/2 | ✓ Complete | 2026-02-13 |
-| 3. Tests & README | 0/TBD | Not started | - |
+| 3. Tests & README | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-12*
-*Last updated: 2026-02-13 - Phase 2 complete*
+*Last updated: 2026-02-13 - Phase 3 planned (2 plans)*
