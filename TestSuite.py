@@ -5,8 +5,11 @@ from TensorizedPauliDecomposition import pauli_decomposition
 
 from qiskit.quantum_info import SparsePauliOp
 
-def test_qiskit(matrix: np.ndarray) -> List[list]:
+def decompose_with_qiskit(matrix: np.ndarray) -> List[list]:
 	"""Decompose a matrix using Qiskit's SparsePauliOp for reference comparison.
+
+	This wrapper function calls Qiskit's built-in Pauli decomposition to
+	provide a reference implementation for validating our TPD algorithm.
 
 	Parameters
 	----------
@@ -20,7 +23,7 @@ def test_qiskit(matrix: np.ndarray) -> List[list]:
 
 	Examples
 	--------
-	>>> result = test_qiskit(np.eye(2))
+	>>> result = decompose_with_qiskit(np.eye(2))
 	>>> len(result)
 	2
 	"""
@@ -29,8 +32,11 @@ def test_qiskit(matrix: np.ndarray) -> List[list]:
 	pauli_strings_qiskit = test_result.paulis
 	return [pauli_strings_qiskit, coeffs_qiskit]
 
-def test_tpd(matrix: np.ndarray) -> List[list]:
+def decompose_with_tpd(matrix: np.ndarray) -> List[list]:
 	"""Decompose a matrix using the tensorized Pauli decomposition algorithm.
+
+	This wrapper function calls our TPD implementation to produce a Pauli
+	decomposition that can be compared against reference implementations.
 
 	Parameters
 	----------
@@ -44,7 +50,7 @@ def test_tpd(matrix: np.ndarray) -> List[list]:
 
 	Examples
 	--------
-	>>> result = test_tpd(np.eye(2))
+	>>> result = decompose_with_tpd(np.eye(2))
 	>>> len(result)
 	2
 	"""
@@ -96,16 +102,25 @@ def compare_methods(method1, method2, matrix: np.ndarray) -> bool:
 	Examples
 	--------
 	>>> M = random_matrix(4)
-	>>> compare_methods(test_tpd, test_qiskit, M)
+	>>> compare_methods(decompose_with_tpd, decompose_with_qiskit, M)
 	True
 	"""
 	pauli_strings_tpd, coeffs_tpd = method1(matrix)
 	pauli_strings_qiskit, coeffs_qiskit = method2(matrix)
 	equal = True
+
+	# Verify that Pauli strings match exactly between both methods.
+	# Both implementations should produce the same operator basis (same set
+	# of Pauli tensor products), so any mismatch indicates an error.
 	for x,y in zip(pauli_strings_tpd, pauli_strings_qiskit):
 		if str(x) != str(y):
 			equal = False
-	# Tolerance for floating-point coefficient comparison
+
+	# Verify that coefficients agree within numerical tolerance.
+	# Different implementations may use different numerical backends
+	# (NumPy, SciPy sparse, etc.) that introduce slight floating-point
+	# variations. 1e-5 is sufficient precision for quantum simulation
+	# while accommodating these implementation differences.
 	eps = 10**(-5)
 	for x,y in zip(coeffs_tpd, coeffs_qiskit):
 		if abs(complex(x) - complex(y)) > eps:
@@ -113,5 +128,7 @@ def compare_methods(method1, method2, matrix: np.ndarray) -> bool:
 	return equal
 
 if __name__ == "__main__":
+	# Run a quick validation: decompose a random 4x4 matrix with both TPD
+	# and Qiskit, then verify equivalence.
 	test_matrix = random_matrix(4)
-	print(compare_methods(test_tpd, test_qiskit, test_matrix))
+	print(compare_methods(decompose_with_tpd, decompose_with_qiskit, test_matrix))
